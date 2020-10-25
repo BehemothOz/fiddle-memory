@@ -16,7 +16,14 @@ export const View = props => {
     const handleClick = () => onClick(offset);
 
     return (
-        <div style={{ backgroundColor: statuses[status] }} onClick={handleClick}>
+        <div
+            style={{
+                margin: 2,
+                color: status === 'closed' ? 'gray' : 'inherit',
+                backgroundColor: statuses[status]
+            }}
+            onClick={handleClick}
+        >
             {symbol}
         </div>
     );

@@ -5,11 +5,11 @@ import * as Board from '../components/Board';
 // two-dimensional - matrix
 
 // TODO: statues - this is constants from Cell file
-const board = [
+const initBoard = [
     { symbol: 'A', status: 'closed' },
-    { symbol: 'A', status: 'open' },
-    { symbol: 'B', status: 'done' },
-    { symbol: 'B', status: 'failed' },
+    { symbol: 'A', status: 'closed' },
+    { symbol: 'B', status: 'closed' },
+    { symbol: 'B', status: 'closed' },
 ];
 
 let statuses = {
@@ -19,6 +19,31 @@ let statuses = {
     Lost: 'Lost',
 };
 
+/*
+    How make this function:
+    1. manual nesting (?)
+    2. lensing (?)
+
+    Target:
+    - change the status of a cell
+
+    Solutions:
+    - mutable operation (ex, board[i].status = status) (bad)
+    - immutable operation
+    -- lensing ex: R.set(R.lensPath(`${i}.status`, status, board))
+*/
+const setStatusAt = (i, status, board) => {
+    return board.reduce((acc, item, index) => {
+        return i === index ? [...acc, { ...item, status }] : [...acc, item];
+    }, []);
+};
+
+// Equal R.curry()
+const openCell = i => state => ({
+    ...state,
+    board: setStatusAt(i, 'open', state.board),
+});
+
 export default function Home() {
     return <GameView />;
 }
@@ -26,12 +51,20 @@ export default function Home() {
 function GameView() {
     const [state, setState] = useState({
         status: statuses.Stopped,
+        board: initBoard,
     });
 
-    const { status } = state;
+    const { status, board } = state;
 
     const handleScreenClick = value => {
-        setState(() => ({ status: value }));
+        // array function can be moved outside the component
+        setState(state => ({ ...state, status: value }));
+    };
+
+    const handleRunningClick = i => {
+        if (status === 'Running') {
+            setState(openCell(i));
+        }
     };
 
     return (
@@ -42,24 +75,17 @@ function GameView() {
                 <button onClick={() => handleScreenClick('Won')}>Won screen</button>
                 <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
             </div>
-            <ScreenBoxView status={status} board={board} />
+            <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
         </div>
     );
 }
 
 function ScreenBoxView(props) {
-    const { status, board } = props;
-
+    const { status, board, onCellClick } = props;
+    console.log(board);
     switch (status) {
         case 'Running':
-            return (
-                <Board.View
-                    board={board}
-                    onClick={args => {
-                        console.log(args);
-                    }}
-                />
-            );
+            return <Board.View board={board} onClick={onCellClick} />;
         case 'Stopped':
             return 'This is stopped screen';
         case 'Won':
