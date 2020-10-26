@@ -33,6 +33,13 @@ let statuses = {
     -- lensing ex: R.set(R.lensPath(`${i}.status`, status, board))
 */
 const setStatusAt = (i, status, board) => {
+    /*
+        with ramda
+        1. path = R.lensPath([i, 'status']) - returns a lens whose focus is the specified path.
+        2. R.set(path, status, board) - returns the result of "setting" the portion of the given
+            data structure focused by the given lens to the given value.
+    */
+
     return board.reduce((acc, item, index) => {
         return i === index ? [...acc, { ...item, status }] : [...acc, item];
     }, []);
