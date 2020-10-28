@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Board from '../components/Board';
 
 // one-dimensional - array
@@ -18,6 +18,16 @@ let statuses = {
     Won: 'Won',
     Lost: 'Lost',
 };
+
+
+const getStatusAt = (i, board) => {
+    /*
+        with ramda
+        R.lensPath([i, 'status], board) + R.view
+    */
+
+    return board[i].status;
+}
 
 /*
     How make this function:
@@ -45,6 +55,56 @@ const setStatusAt = (i, status, board) => {
     }, []);
 };
 
+// return [status * n] or [] | see R.chain()
+const getStatuses = (predicateFn, board) => {
+    // name for vae - passedName
+};
+
+// return board with new statuses
+const setStatuses = (predicateFn, status, board) => {};
+
+const canOpenAt = (i, board) => {
+    // getStatuses() -- predicate isFailed || isOpen
+    return i < board.length && board[i].status === 'closed' && getStatuses().length < 2 // num 2 -> check length with function where num will be custom value
+}
+
+const succeedStep = state => ({
+    ...state,
+    board: setStatuses('isOpen', 'done', board)
+})
+
+const failStep = state => ({
+    ...state,
+    board: setStatuses('isOpen', 'failed', board)
+})
+
+const failClosedStep = state => ({
+    ...state,
+    board: setStatuses('isFailed', 'closed', board)
+})
+
+// write -> how getStatuses
+const getSymbolsBy = () => {}
+
+const areOpensEqual = board => {
+    // 1. get symbol from openedCell
+    // 2. check count and equal symbol
+}
+
+const failClosedStep = board => {
+
+}
+
+// See vacuous truth!!
+// With Ramda
+const allEqual = (xs) => {
+    if (xs.length < 2) return true;
+
+    const [head, ...tail] = xs;
+    return R.all(R.equal(head, tail))
+}
+// -------
+
 // Equal R.curry()
 const openCell = i => state => ({
     ...state,
@@ -62,6 +122,20 @@ function GameView() {
     });
 
     const { status, board } = state;
+
+    // main login
+    useEffect(() => {
+        if (areOpensEqual(board)) {
+            setState(failStep)
+        } else if (areOpensDifferent(board)) {
+            setState(failStep(board))
+
+            // Reset timer?
+            setTimeout(() => {
+                setState(failClosedStep)
+            }, 500)
+        }
+    }, [board])
 
     const handleScreenClick = value => {
         // array function can be moved outside the component
