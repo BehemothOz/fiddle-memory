@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import * as Board from '../components/Board';
 
+/*
+    TODO
+    * 1. logic without Ramda
+    * 2. logic with Ramda
+*/
+
 // one-dimensional - array
 // two-dimensional - matrix
 
