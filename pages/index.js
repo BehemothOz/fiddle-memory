@@ -12,13 +12,14 @@ const initBoard = [
     { symbol: 'B', status: 'closed' },
 ];
 
+const isOpen = cell => cell.status === 'open';
+
 let statuses = {
     Stopped: 'Stopped',
     Running: 'Running',
     Won: 'Won',
     Lost: 'Lost',
 };
-
 
 const getStatusAt = (i, board) => {
     /*
@@ -27,7 +28,7 @@ const getStatusAt = (i, board) => {
     */
 
     return board[i].status;
-}
+};
 
 /*
     How make this function:
@@ -61,48 +62,58 @@ const getStatuses = (predicateFn, board) => {
 };
 
 // return board with new statuses
-const setStatuses = (predicateFn, status, board) => {};
+const setStatuses = (predicateFn, status, board) => {
+    return board.map(cell => (predicateFn(cell) ? { ...cell, status } : cell));
+};
 
 const canOpenAt = (i, board) => {
     // getStatuses() -- predicate isFailed || isOpen
-    return i < board.length && board[i].status === 'closed' && getStatuses().length < 2 // num 2 -> check length with function where num will be custom value
-}
+    return i < board.length && board[i].status === 'closed' && getStatuses().length < 2; // num 2 -> check length with function where num will be custom value
+};
 
-const succeedStep = state => ({
-    ...state,
-    board: setStatuses('isOpen', 'done', board)
-})
+const succeedStep = state =>
+    console.log(state) || {
+        ...state,
+        board: setStatuses(isOpen, 'done', state.board),
+    };
 
 const failStep = state => ({
     ...state,
-    board: setStatuses('isOpen', 'failed', board)
-})
+    board: setStatuses('isOpen', 'failed', board),
+});
 
 const failClosedStep = state => ({
     ...state,
-    board: setStatuses('isFailed', 'closed', board)
-})
+    board: setStatuses('isFailed', 'closed', board),
+});
 
-// write -> how getStatuses
-const getSymbolsBy = () => {}
-
-const areOpensEqual = board => {
-    // 1. get symbol from openedCell
-    // 2. check count and equal symbol
-}
-
-const failClosedStep = board => {
-
-}
+const getSymbolsBy = (predicateFn, board) => {
+    return board.filter(predicateFn).map(cell => cell.symbol);
+};
 
 // See vacuous truth!!
-// With Ramda
-const allEqual = (xs) => {
+// With Ramda --> R.all(R.equal(head, tail));
+const allEqual = xs => {
     if (xs.length < 2) return true;
 
     const [head, ...tail] = xs;
-    return R.all(R.equal(head, tail))
-}
+    return tail.every(it => it === head);
+};
+
+const areOpensEqual = board => {
+    const openedCell = getSymbolsBy(isOpen, board);
+    return openedCell.length >= 2 && allEqual(openedCell);
+};
+
+const areOpensDifferent = board => {
+    const openedCell = getSymbolsBy(isOpen, board);
+    return openedCell.length >= 2 && !allEqual(openedCell);
+};
+
+// const failClosedStep = board => {
+
+// }
+
 // -------
 
 // Equal R.curry()
@@ -126,16 +137,19 @@ function GameView() {
     // main login
     useEffect(() => {
         if (areOpensEqual(board)) {
-            setState(failStep)
+            console.log('Equal!');
+            setState(succeedStep);
         } else if (areOpensDifferent(board)) {
-            setState(failStep(board))
-
-            // Reset timer?
-            setTimeout(() => {
-                setState(failClosedStep)
-            }, 500)
+            console.log('Not Equal!');
+            // setState(failStep(board))
+            // // Reset timer?
+            // setTimeout(() => {
+            //     setState(failClosedStep)
+            // }, 500)
         }
-    }, [board])
+    }, [board]);
+
+    console.log('control render main state: ', state);
 
     const handleScreenClick = value => {
         // array function can be moved outside the component
@@ -163,7 +177,7 @@ function GameView() {
 
 function ScreenBoxView(props) {
     const { status, board, onCellClick } = props;
-    console.log(board);
+
     switch (status) {
         case 'Running':
             return <Board.View board={board} onClick={onCellClick} />;
