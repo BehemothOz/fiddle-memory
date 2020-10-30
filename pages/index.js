@@ -12,7 +12,10 @@ const initBoard = [
     { symbol: 'B', status: 'closed' },
 ];
 
+// helpers for statues cell
 const isOpen = cell => cell.status === 'open';
+const isFailed = cell => cell.status === 'failed';
+const isClosed = cell => cell.status === 'closed';
 
 let statuses = {
     Stopped: 'Stopped',
@@ -71,50 +74,45 @@ const canOpenAt = (i, board) => {
     return i < board.length && board[i].status === 'closed' && getStatuses().length < 2; // num 2 -> check length with function where num will be custom value
 };
 
-const succeedStep = state =>
-    console.log(state) || {
-        ...state,
-        board: setStatuses(isOpen, 'done', state.board),
-    };
+const succeedStep = state => ({
+    ...state,
+    board: setStatuses(isOpen, 'done', state.board),
+});
 
 const failStep = state => ({
     ...state,
-    board: setStatuses('isOpen', 'failed', board),
+    board: setStatuses(isOpen, 'failed', state.board),
 });
 
 const failClosedStep = state => ({
     ...state,
-    board: setStatuses('isFailed', 'closed', board),
+    board: setStatuses(isFailed, 'closed', state.board),
 });
 
 const getSymbolsBy = (predicateFn, board) => {
     return board.filter(predicateFn).map(cell => cell.symbol);
 };
 
-// See vacuous truth!!
 // With Ramda --> R.all(R.equal(head, tail));
 const allEqual = xs => {
+    // See vacuous truth!!
     if (xs.length < 2) return true;
 
     const [head, ...tail] = xs;
     return tail.every(it => it === head);
 };
 
+// logic with number 2 -> move to function
 const areOpensEqual = board => {
     const openedCell = getSymbolsBy(isOpen, board);
     return openedCell.length >= 2 && allEqual(openedCell);
 };
 
+// logic with number 2 -> move to function
 const areOpensDifferent = board => {
     const openedCell = getSymbolsBy(isOpen, board);
     return openedCell.length >= 2 && !allEqual(openedCell);
 };
-
-// const failClosedStep = board => {
-
-// }
-
-// -------
 
 // Equal R.curry()
 const openCell = i => state => ({
@@ -137,15 +135,14 @@ function GameView() {
     // main login
     useEffect(() => {
         if (areOpensEqual(board)) {
-            console.log('Equal!');
             setState(succeedStep);
         } else if (areOpensDifferent(board)) {
-            console.log('Not Equal!');
-            // setState(failStep(board))
-            // // Reset timer?
-            // setTimeout(() => {
-            //     setState(failClosedStep)
-            // }, 500)
+            setState(failStep);
+
+            // If this component state will be unmount - add logic for reset timer
+            setTimeout(() => {
+                setState(failClosedStep);
+            }, 500);
         }
     }, [board]);
 
