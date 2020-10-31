@@ -1,5 +1,3 @@
-import { getClassName } from './classes';
-
 export const Status = {
     OPEN: 'open',
     FAILED: 'failed',
