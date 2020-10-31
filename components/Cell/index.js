@@ -1,10 +1,5 @@
-// TODO: statues - this is constants
-const statuses = {
-    open: 'green',
-    failed: 'red',
-    done: 'orange',
-    closed: 'gray',
-};
+import { Status, isClosed } from './status';
+import { getClassName } from './classes';
 
 /*
     Name Cell will be reserved for type
@@ -18,10 +13,9 @@ export const View = props => {
     return (
         <div
             style={{
-                margin: 2,
-                color: status === 'closed' ? 'gray' : 'inherit',
-                backgroundColor: statuses[status]
+                color: isClosed(cell) ? 'gray' : 'inherit',
             }}
+            className={`cell ${getClassName(status)}`}
             onClick={handleClick}
         >
             {symbol}
@@ -32,6 +26,6 @@ export const View = props => {
 View.defaultProps = {
     cell: {
         symbol: '',
-        status: 'closed',
+        status: Status.CLOSED,
     },
 };
