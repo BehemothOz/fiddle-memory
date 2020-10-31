@@ -67,6 +67,7 @@ const setStatusAt = (i, status, board) => {
 
 // return [status * n] or [] | see R.chain()
 const getStatuses = (predicateFn, board) => {
+    return board.filter(predicateFn).map(cell => cell.status);
     // name for vae - passedName
 };
 
@@ -77,7 +78,15 @@ const setStatuses = (predicateFn, status, board) => {
 
 const canOpenAt = (i, board) => {
     // getStatuses() -- predicate isFailed || isOpen
-    return i < board.length && board[i].status === 'closed' && getStatuses().length < 2; // num 2 -> check length with function where num will be custom value
+    return (
+        i < board.length &&
+        isClosed(board[i]) &&
+        getStatuses(cell => isFailed(cell) || isOpen(cell), board).length < 2
+    ); // num 2 -> check length with function where num will be custom value
+};
+
+const canOpenCell = (i, state) => {
+    return canOpenAt(i, state.board);
 };
 
 const succeedStep = state => ({
@@ -160,7 +169,7 @@ function GameView() {
     };
 
     const handleRunningClick = i => {
-        if (status === 'Running') {
+        if (status === 'Running' && canOpenCell(i, state)) {
             setState(openCell(i));
         }
     };
