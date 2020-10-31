@@ -1,154 +1,48 @@
 import { useEffect, useState } from 'react';
 import * as Board from '../Board';
 import * as Cell from '../Cell';
+import { GameStatus } from './constants';
+import { initBoard } from './mock';
 
-/*
-    TODO
-    * 1. logic without Ramda
-    * 2. logic with Ramda
-*/
-
-// one-dimensional - array
-// two-dimensional - matrix
-
-// TODO: statues - this is constants from Cell file
-const initBoard = [
-    { symbol: 'A', status: Cell.Status.CLOSED },
-    { symbol: 'A', status: Cell.Status.CLOSED },
-    { symbol: 'B', status: Cell.Status.CLOSED },
-    { symbol: 'B', status: Cell.Status.CLOSED },
-];
-
-let statuses = {
-    Stopped: 'Stopped',
-    Running: 'Running',
-    Won: 'Won',
-    Lost: 'Lost',
-};
-
-const getStatusAt = (i, board) => {
-    /*
-        with ramda
-        R.lensPath([i, 'status], board) + R.view
-    */
-
-    return board[i].status;
-};
-
-/*
-    How make this function:
-    1. manual nesting (?)
-    2. lensing (?)
-
-    Target:
-    - change the status of a cell
-
-    Solutions:
-    - mutable operation (ex, board[i].status = status) (bad)
-    - immutable operation
-    -- lensing ex: R.set(R.lensPath(`${i}.status`, status, board))
-*/
-const setStatusAt = (i, status, board) => {
-    /*
-        with ramda
-        1. path = R.lensPath([i, 'status']) - returns a lens whose focus is the specified path.
-        2. R.set(path, status, board) - returns the result of "setting" the portion of the given
-            data structure focused by the given lens to the given value.
-    */
-
-    return board.reduce((acc, item, index) => {
-        return i === index ? [...acc, { ...item, status }] : [...acc, item];
-    }, []);
-};
-
-// return [status * n] or [] | see R.chain()
-const getStatuses = (predicateFn, board) => {
-    return board.filter(predicateFn).map(cell => cell.status);
-    // name for vae - passedName
-};
-
-// return board with new statuses
-const setStatuses = (predicateFn, status, board) => {
-    return board.map(cell => (predicateFn(cell) ? { ...cell, status } : cell));
-};
-
-const canOpenAt = (i, board) => {
-    // getStatuses() -- predicate isFailed || isOpen
+const canOpen = (i, board) => {
     return (
         i < board.length &&
         Cell.isClosed(board[i]) &&
-        getStatuses(cell => Cell.isFailed(cell) || Cell.isOpen(cell), board).length < 2
+        Board.getStatuses(cell => Cell.isFailed(cell) || Cell.isOpen(cell), board).length < 2
     ); // num 2 -> check length with function where num will be custom value
 };
 
 const canOpenCell = (i, state) => {
-    return canOpenAt(i, state.board);
-};
-
-const succeedStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isOpen, Cell.Status.OPEN, state.board),
-});
-
-const failStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isOpen, Cell.Status.FAILED, state.board),
-});
-
-const failClosedStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isFailed, Cell.Status.CLOSED, state.board),
-});
-
-const getSymbolsBy = (predicateFn, board) => {
-    return board.filter(predicateFn).map(cell => cell.symbol);
-};
-
-// With Ramda --> R.all(R.equal(head, tail));
-const allEqual = xs => {
-    // See vacuous truth!!
-    if (xs.length < 2) return true;
-
-    const [head, ...tail] = xs;
-    return tail.every(it => it === head);
-};
-
-// logic with number 2 -> move to function
-const areOpensEqual = board => {
-    const openedCell = getSymbolsBy(Cell.isOpen, board);
-    return openedCell.length >= 2 && allEqual(openedCell);
-};
-
-// logic with number 2 -> move to function
-const areOpensDifferent = board => {
-    const openedCell = getSymbolsBy(Cell.isOpen, board);
-    return openedCell.length >= 2 && !allEqual(openedCell);
+    return canOpen(i, state.board);
 };
 
 // Equal R.curry()
 const openCell = i => state => ({
     ...state,
-    board: setStatusAt(i, Cell.Status.OPEN, state.board),
+    board: Board.setStatus(i, Cell.Status.OPEN, state.board),
 });
 
 export function GameView() {
+    /*
+     * one-dimensional - array
+     * two-dimensional - matrix
+     */
     const [state, setState] = useState({
-        status: statuses.Stopped,
+        status: GameStatus.Stopped,
         board: initBoard,
     });
 
     const { status, board } = state;
 
-    // main login
     useEffect(() => {
-        if (areOpensEqual(board)) {
-            setState(succeedStep);
-        } else if (areOpensDifferent(board)) {
-            setState(failStep);
+        if (Board.areOpensEqual(board)) {
+            setState(Board.succeedStep);
+        } else if (Board.areOpensDifferent(board)) {
+            setState(Board.failStep);
 
             // If this component state will be unmount - add logic for reset timer
             setTimeout(() => {
-                setState(failClosedStep);
+                setState(Board.failClosedStep);
             }, 500);
         }
     }, [board]);
@@ -161,7 +55,8 @@ export function GameView() {
     };
 
     const handleRunningClick = i => {
-        if (status === 'Running' && canOpenCell(i, state)) {
+        if (status === GameStatus.RUNNING && canOpenCell(i, state)) {
+            console.log(1);
             setState(openCell(i));
         }
     };
