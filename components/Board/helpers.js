@@ -1,9 +1,5 @@
 export const getStatus = (i, board) => {
-    /*
-        with ramda
-        R.lensPath([i, 'status], board) + R.view
-    */
-
+    // with ramda ->> R.lensPath([i, 'status], board) + R.view
     return board[i].status;
 };
 
@@ -39,7 +35,6 @@ export const getStatuses = (predicateFn, board) => {
     // name for vae - passedName
 };
 
-// return board with new statuses
 export const setStatuses = (predicateFn, status, board) => {
     return board.map(cell => (predicateFn(cell) ? { ...cell, status } : cell));
 };
