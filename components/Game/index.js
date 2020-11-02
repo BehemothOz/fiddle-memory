@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import * as Board from '../Board';
 import * as Cell from '../Cell';
-import { GameStatus } from './constants';
 import { initBoard } from './mock';
+
+export const GameStatus = {
+    STOPPED: 'Stopped',
+    RUNNING: 'Running',
+    WON: 'Won',
+    LOST: 'Lost',
+};
 
 const canOpen = (i, board) => {
     return (
@@ -21,6 +27,9 @@ const openCell = i => state => ({
     ...state,
     board: Board.setStatus(i, Cell.Status.OPEN, state.board),
 });
+
+// Equal R.curry()
+const toggleScreen = value => state => ({ ...state, status: value });
 
 export function GameView() {
     /*
@@ -50,13 +59,11 @@ export function GameView() {
     console.log('control render main state: ', state);
 
     const handleScreenClick = value => {
-        // array function can be moved outside the component
-        setState(state => ({ ...state, status: value }));
+        setState(toggleScreen(value));
     };
 
     const handleRunningClick = i => {
         if (status === GameStatus.RUNNING && canOpenCell(i, state)) {
-            console.log(1);
             setState(openCell(i));
         }
     };
