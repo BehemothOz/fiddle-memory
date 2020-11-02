@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import * as Board from '../Board';
 import * as Cell from '../Cell';
+import { ScreenView } from '../Screen';
+
 import { initBoard } from './mock';
 
 export const GameStatus = {
@@ -88,9 +90,9 @@ function ScreenBoxView(props) {
         case 'Running':
             return <Board.View board={board} onClick={onCellClick} />;
         case 'Stopped':
-            return 'This is stopped screen';
+            return <ScreenView>'This is stopped screen'</ScreenView>;
         case 'Won':
-            return 'This is won screen';
+            return <ScreenView>'This is won screen'</ScreenView>;
         case 'Lost':
             return 'This is lost screen';
         default:

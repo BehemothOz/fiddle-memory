@@ -39,6 +39,6 @@ export const setStatuses = (predicateFn, status, board) => {
     return board.map(cell => (predicateFn(cell) ? { ...cell, status } : cell));
 };
 
-export const getSymbolsBy = (predicateFn, board) => {
+export const getSymbols = (predicateFn, board) => {
     return board.filter(predicateFn).map(cell => cell.symbol);
 };

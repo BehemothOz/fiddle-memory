@@ -1,5 +1,5 @@
 import * as Cell from '../Cell';
-import { setStatuses } from './helpers';
+import { setStatuses, getSymbols } from './helpers';
 import { allEqual } from '../../libs';
 
 export const succeedStep = state => ({
@@ -19,13 +19,13 @@ export const failClosedStep = state => ({
 
 // logic with number 2 -> move to function
 export const areOpensEqual = board => {
-    const openedCell = getSymbolsBy(isOpen, board);
+    const openedCell = getSymbols(Cell.isOpen, board);
     return openedCell.length >= 2 && allEqual(openedCell);
 };
 
 // logic with number 2 -> move to function
 export const areOpensDifferent = board => {
-    const openedCell = getSymbolsBy(isOpen, board);
+    const openedCell = getSymbols(Cell.isOpen, board);
     return openedCell.length >= 2 && !allEqual(openedCell);
 };
 
@@ -35,11 +35,6 @@ export const View = props => {
     return board.map((cell, i) => {
         return <Cell.View key={i} offset={i} cell={cell} onClick={onCellClick} />;
     });
-};
-
-export const ScreenView = props => {
-    const { children } = props;
-    return <div className="screen">{children}</div>;
 };
 
 View.defaultProps = {
