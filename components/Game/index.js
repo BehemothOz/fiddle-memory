@@ -33,6 +33,11 @@ const openCell = i => state => ({
 // Equal R.curry()
 const toggleScreen = value => state => ({ ...state, status: value });
 
+const hasWinningCond = state => {
+    const doneCell = state.board.filter(Cell.isDone);
+    return doneCell.length === state.board.length;
+}
+
 export function GameView() {
     /*
      * one-dimensional - array
@@ -44,6 +49,16 @@ export function GameView() {
     });
 
     const { status, board } = state;
+
+    useEffect(() => {
+        if (state.status === GameStatus.RUNNING && hasWinningCond(state)) {
+            // write setStatusFunction
+            setState(prev => ({
+                ...prev,
+                status: GameStatus.WON,
+            }))
+        }
+    }, [state])
 
     useEffect(() => {
         if (Board.areOpensEqual(board)) {
