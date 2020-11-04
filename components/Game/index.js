@@ -36,7 +36,7 @@ const toggleScreen = value => state => ({ ...state, status: value });
 const hasWinningCond = state => {
     const doneCell = state.board.filter(Cell.isDone);
     return doneCell.length === state.board.length;
-}
+};
 
 export function GameView() {
     /*
@@ -52,13 +52,16 @@ export function GameView() {
 
     useEffect(() => {
         if (state.status === GameStatus.RUNNING && hasWinningCond(state)) {
-            // write setStatusFunction
+            /*
+                - write setStatusFunction
+                - add delay for win step
+            */
             setState(prev => ({
                 ...prev,
                 status: GameStatus.WON,
-            }))
+            }));
         }
-    }, [state])
+    }, [state]);
 
     useEffect(() => {
         if (Board.areOpensEqual(board)) {
