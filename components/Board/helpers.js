@@ -1,3 +1,5 @@
+import { shuffle } from '../../libs';
+
 export const getStatus = (i, board) => {
     // with ramda ->> R.lensPath([i, 'status], board) + R.view
     return board[i].status;
