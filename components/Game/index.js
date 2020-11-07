@@ -45,7 +45,7 @@ export function GameView() {
      */
     const [state, setState] = useState({
         status: GameStatus.Stopped,
-        board: Board.makeRandom(3, 2),
+        board: Board.makeRandom(16),
     });
 
     const { status, board } = state;
@@ -67,15 +67,15 @@ export function GameView() {
         if (Board.areOpensEqual(board)) {
             setState(Board.succeedStep);
         }
-        // else if (Board.areOpensDifferent(board)) {
-        //     console.log('!!!!!!!!!!!!!!!!')
-        //     setState(Board.failStep);
+        else if (Board.areOpensDifferent(board)) {
+            console.log('!!!!!!!!!!!!!!!!')
+            setState(Board.failStep);
 
-        //     // If this component state will be unmount - add logic for reset timer
-        //     setTimeout(() => {
-        //         setState(Board.failClosedStep);
-        //     }, 500);
-        // }
+            // If this component state will be unmount - add logic for reset timer
+            setTimeout(() => {
+                setState(Board.failClosedStep);
+            }, 500);
+        }
     }, [board]);
 
     console.log('control render main state: ', state);
@@ -99,7 +99,6 @@ export function GameView() {
                 <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
             </div>
 
-            <Spade /> | <Clubs /> | <Diamond /> | <Heart />
             <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
         </div>
     );

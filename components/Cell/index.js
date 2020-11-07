@@ -1,3 +1,5 @@
+import * as Icon from '../../icons';
+
 export const Status = {
     OPEN: 'open',
     FAILED: 'failed',
@@ -24,12 +26,23 @@ export const getClassName = status => {
     return UNKNOWN_CLASS;
 };
 
+export const IconByValue = {
+    1: Icon.Spade,
+    2: Icon.Clubs,
+    3: Icon.Diamond,
+    4: Icon.Heart,
+    5: Icon.Truck,
+    6: Icon.Power,
+    7: Icon.Star,
+    8: Icon.Smile,
+};
+
 /*
     Name Cell will be reserved for type
 */
 export const View = props => {
     const { cell, offset, onClick } = props;
-    const { symbol, status } = cell;
+    const { symbol, status, icon: Icon } = cell;
 
     const handleClick = () => onClick(offset);
 
@@ -41,7 +54,7 @@ export const View = props => {
             className={`cell ${getClassName(status)}`}
             onClick={handleClick}
         >
-            {symbol}
+            <Icon />
         </div>
     );
 };

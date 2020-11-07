@@ -29,7 +29,7 @@ const SvgIcon = props => {
                 display: 'inline-block',
                 fill: 'currentColor',
                 flexShrink: 0,
-                fontSize: 24,
+                fontSize: 'inherit',
             }}
             viewBox={viewBox}
             focusable="false"

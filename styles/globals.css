@@ -19,8 +19,21 @@ a {
     background-color: cadetblue;
 }
 
+.grid {
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 8px;
+}
+
 .cell {
-  margin: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 48px;
+    /* margin: 2px; */
 }
 
 .open {
@@ -40,5 +53,5 @@ a {
 }
 
 .unknown {
-  background-color: black;
+    background-color: black;
 }
