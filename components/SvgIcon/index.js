@@ -8,7 +8,7 @@ export const createSvgIcon = (path, name) => {
     return Component;
 };
 
-const SvgIcon = memo(props => {
+const SvgIcon = props => {
     const {
         width,
         children,
@@ -33,11 +33,9 @@ const SvgIcon = memo(props => {
             }}
             viewBox={viewBox}
             focusable="false"
-            aria-hidden={title ? undefined : 'true'}
-            role={title ? 'img' : 'presentation'}
             {...other}
         >
             {children}
         </Component>
     );
-});
+};
