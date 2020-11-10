@@ -37,27 +37,6 @@ const hasWinningCond = state => {
     return doneCell.length === state.board.length;
 };
 
-const Child = () => {
-    const theme = useTheme();
-    // const toggleTheme = useToggleTheme();
-
-    console.log('Child: ', theme);
-    // background: ${theme.palette.background}
-    return (
-        <>
-            <div className="div" style={{ width: 100, height: 100, border: '1px solid red' }}></div>
-            <style jsx>
-                {`
-                    .div {
-                        transition: background 0.2s ease;
-                        background: ${theme.palette.background};
-                    }
-                `}
-            </style>
-        </>
-    );
-};
-
 export function GameView() {
     /*
      * one-dimensional - array
@@ -126,16 +105,16 @@ export function GameView() {
                     <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
                     {/* <input
                         type="checkbox"
-                        onClick={e => {
-                            console.log(e.target.checked);
-                            toggleTheme(e.target.checked)
-                        }}
+                        // onClick={e => {
+                        //     console.log(e.target.checked);
+                        //     toggleTheme(e.target.checked)
+                        // }}
                     /> */}
                 </div>
 
-                <ThemeProvider value={{ type: theme.type === 'dark' ? 'light' : 'dark' }}>
+                {/* <ThemeProvider value={{ type: theme.type === 'dark' ? 'light' : 'dark' }}>
                     <Child />
-                </ThemeProvider>
+                </ThemeProvider> */}
 
                 <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
             </div>
@@ -144,8 +123,6 @@ export function GameView() {
                     #root {
                         width: 100vw;
                         height: 100vh;
-                        transition: background 0.2s ease;
-                        background: ${theme.palette.background};
                     }
                 `}
             </style>
@@ -153,8 +130,83 @@ export function GameView() {
     );
 }
 
+const useInvertThemeType = () => {
+    const theme = useTheme();
+    return {
+        type: theme.type == 'light' ? 'dark' : 'light',
+    };
+};
+
+const Child = () => {
+    const theme = useTheme();
+    return (
+        <>
+            <div className="child" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
+                Child
+            </div>
+            <style jsx>
+                {`
+                    .child {
+                        color: ${theme.palette.text.primary};
+                        background: ${theme.palette.background};
+                    }
+                `}
+            </style>
+        </>
+    );
+};
+
+const Right = () => {
+    const theme = useTheme();
+    const invertTheme = useInvertThemeType();
+    console.log(theme)
+    return (
+        <>
+            <div className="right" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
+                Right
+                <ThemeProvider theme={{}}>
+                    <Child />
+                </ThemeProvider>
+            </div>
+            <style jsx>
+                {`
+                    .right {
+                        color: ${theme.palette.text.primary};
+                        background: ${theme.palette.background};
+                    }
+                `}
+            </style>
+        </>
+    );
+};
+
+const Left = () => {
+    const theme = useTheme();
+
+    const invertTheme = useInvertThemeType();
+    return (
+        <>
+            <div className="left" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
+                Left
+                <ThemeProvider theme={{ background: 'orange' }}>
+                    <Right />
+                </ThemeProvider>
+            </div>
+            <style jsx>
+                {`
+                    .left {
+                        color: ${theme.palette.text.primary};
+                        background: ${theme.palette.background};
+                    }
+                `}
+            </style>
+        </>
+    );
+};
+
 function ScreenBoxView(props) {
     const { status, board, onCellClick } = props;
+    const invertTheme = useInvertThemeType();
 
     switch (status) {
         case 'Running':
@@ -166,6 +218,10 @@ function ScreenBoxView(props) {
         case 'Lost':
             return 'This is lost screen';
         default:
-            return 'No screen';
+            return (
+                <div style={{ height: '100%' }}>
+                    <Left />
+                </div>
+            );
     }
 }

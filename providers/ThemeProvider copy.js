@@ -7,7 +7,7 @@ const ThemeContext = React.createContext(null);
 const mergeOuterLocalTheme = (outerTheme, localTheme) => {
     const { type } = localTheme;
 
-    if (type && outerTheme.type !== type) {
+    if (outerTheme.type !== type) {
         return {
             ...outerTheme,
             ...localTheme,
@@ -24,6 +24,8 @@ const mergeOuterLocalTheme = (outerTheme, localTheme) => {
 export const ThemeProvider = props => {
     const { children, theme: localTheme } = props;
     const outerTheme = useTheme();
+
+    console.log('outerTheme', outerTheme);
 
     const theme = outerTheme === null ? localTheme : mergeOuterLocalTheme(outerTheme, localTheme);
 
