@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import * as Board from '../Board';
 import * as Cell from '../Cell';
 import { ScreenView } from '../Screen';
-
-import { Spade, Clubs, Diamond, Heart } from '../../icons'
+import { ThemeProvider, useTheme } from '../../providers/ThemeProvider';
 
 export const GameStatus = {
     STOPPED: 'Stopped',
@@ -38,6 +37,27 @@ const hasWinningCond = state => {
     return doneCell.length === state.board.length;
 };
 
+const Child = () => {
+    const theme = useTheme();
+    // const toggleTheme = useToggleTheme();
+
+    console.log('Child: ', theme);
+    // background: ${theme.palette.background}
+    return (
+        <>
+            <div className="div" style={{ width: 100, height: 100, border: '1px solid red' }}></div>
+            <style jsx>
+                {`
+                    .div {
+                        transition: background 0.2s ease;
+                        background: ${theme.palette.background};
+                    }
+                `}
+            </style>
+        </>
+    );
+};
+
 export function GameView() {
     /*
      * one-dimensional - array
@@ -49,6 +69,11 @@ export function GameView() {
     });
 
     const { status, board } = state;
+
+    const theme = useTheme();
+    // const toggleTheme = useToggleTheme();
+
+    console.log('Parent: ', theme);
 
     useEffect(() => {
         if (state.status === GameStatus.RUNNING && hasWinningCond(state)) {
@@ -66,9 +91,8 @@ export function GameView() {
     useEffect(() => {
         if (Board.areOpensEqual(board)) {
             setState(Board.succeedStep);
-        }
-        else if (Board.areOpensDifferent(board)) {
-            console.log('!!!!!!!!!!!!!!!!')
+        } else if (Board.areOpensDifferent(board)) {
+            console.log('!!!!!!!!!!!!!!!!');
             setState(Board.failStep);
 
             // If this component state will be unmount - add logic for reset timer
@@ -79,6 +103,8 @@ export function GameView() {
     }, [board]);
 
     console.log('control render main state: ', state);
+
+    // const [a, setA] = useState(false);
 
     const handleScreenClick = value => {
         setState(toggleScreen(value));
@@ -91,16 +117,39 @@ export function GameView() {
     };
 
     return (
-        <div style={{ padding: '48px 0' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0 }}>
-                <button onClick={() => handleScreenClick('Stopped')}>Start screen</button>
-                <button onClick={() => handleScreenClick('Running')}>Game screen</button>
-                <button onClick={() => handleScreenClick('Won')}>Won screen</button>
-                <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
-            </div>
+        <>
+            <div id="root" style={{ padding: '48px 0' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0 }}>
+                    <button onClick={() => handleScreenClick('Stopped')}>Start screen</button>
+                    <button onClick={() => handleScreenClick('Running')}>Game screen</button>
+                    <button onClick={() => handleScreenClick('Won')}>Won screen</button>
+                    <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
+                    {/* <input
+                        type="checkbox"
+                        onClick={e => {
+                            console.log(e.target.checked);
+                            toggleTheme(e.target.checked)
+                        }}
+                    /> */}
+                </div>
 
-            <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
-        </div>
+                <ThemeProvider value={{ type: theme.type === 'dark' ? 'light' : 'dark' }}>
+                    <Child />
+                </ThemeProvider>
+
+                <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
+            </div>
+            <style jsx>
+                {`
+                    #root {
+                        width: 100vw;
+                        height: 100vh;
+                        transition: background 0.2s ease;
+                        background: ${theme.palette.background};
+                    }
+                `}
+            </style>
+        </>
     );
 }
 

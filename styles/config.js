@@ -20,3 +20,4 @@ const config = {
         hint: '',
     },
 };
+// https://nextjs.org/blog/styling-next-with-styled-jsx
