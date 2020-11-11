@@ -15,10 +15,6 @@ a {
     box-sizing: border-box;
 }
 
-.screen {
-    /* background-color: cadetblue; */
-}
-
 .grid {
     width: 500px;
     height: 500px;
@@ -59,7 +55,7 @@ a {
 }
 
 .close {
-    background-color: gray;
+    background-color: #353D50;
 }
 
 .unknown {

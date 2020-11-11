@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }) {
                     }
 
                     #root {
+                        position: relative;
                         display: flex;
                         justify-content: center;
                         align-items: center;

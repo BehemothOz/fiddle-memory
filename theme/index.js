@@ -13,7 +13,7 @@ const dark = {
         secondary: 'rgba(0, 0, 0, 0.54)',
         hint: 'rgba(0, 0, 0, 0.38)',
     },
-    background: 'blue',
+    background: '#28303D',
 };
 
 export const createPalette = type => {

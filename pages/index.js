@@ -15,10 +15,20 @@ export default function HomePage(props) {
 
     return (
         <>
-            <div style={{ position: 'absolute', right: 0 }}>
+            <div className="top-bar">
                 <Toggle onToggleClick={toggleMode} />
             </div>
             <GameView />
+            <style jsx>{`
+                .top-bar {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    display: flex;
+                    justify-content: flex-end;
+                    width: 100%;
+                }
+            `}</style>
         </>
     );
 }

@@ -47,15 +47,22 @@ export const View = props => {
     const handleClick = () => onClick(offset);
 
     return (
+        <>
         <div
             style={{
-                color: isClosed(cell) ? 'gray' : 'inherit',
+                color: isClosed(cell) ? '#353D50' : 'inherit',
             }}
             className={`cell ${getClassName(status)}`}
             onClick={handleClick}
         >
             <Icon />
         </div>
+        <style jsx>{`
+            .cell {
+                border-radius: 4px;
+            }
+        `}</style>
+        </>
     );
 };
 
