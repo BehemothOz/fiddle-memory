@@ -89,7 +89,7 @@ export function GameView() {
 
     return (
         <>
-            <div id="root" style={{ padding: '48px 0' }}>
+            <div>
                 <div style={{ position: 'absolute', top: 0, left: 0 }}>
                     <button onClick={() => handleScreenClick('Stopped')}>Start screen</button>
                     <button onClick={() => handleScreenClick('Running')}>Game screen</button>
@@ -99,14 +99,14 @@ export function GameView() {
 
                 <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
             </div>
-            <style jsx>
+            {/* <style jsx>
                 {`
                     #root {
                         width: 100vw;
                         height: 100vh;
                     }
                 `}
-            </style>
+            </style> */}
         </>
     );
 }

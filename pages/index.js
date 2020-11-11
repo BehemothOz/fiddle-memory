@@ -1,7 +1,5 @@
-import { ThemeProvider } from '../providers/ThemeProvider';
 import { GameView } from '../components/Game';
-import { createTheme } from '../theme';
-import { useThemeMode } from '../hooks/useThemeMode';
+import { Toggle } from '../components/Toggle';
 
 /*
     !Steps:
@@ -12,24 +10,15 @@ import { useThemeMode } from '../hooks/useThemeMode';
     ? 4. type
 */
 
-export default function HomePage() {
-    const [mode, toggleMode] = useThemeMode();
-
-    const theme = createTheme({ type: mode });
+export default function HomePage(props) {
+    const { toggleMode } = props;
 
     return (
-        <ThemeProvider theme={theme}>
-            <button
-                type="checkbox"
-                style={{ position: 'absolute', bottom: 50 }}
-                onClick={e => {
-                    console.log(e.target.checked);
-                    toggleMode(e.target.checked);
-                }}
-            >
-                Toggle
-            </button>
-            <GameView />;
-        </ThemeProvider>
+        <>
+            <div style={{ position: 'absolute', right: 0 }}>
+                <Toggle onToggleClick={toggleMode} />
+            </div>
+            <GameView />
+        </>
     );
 }
