@@ -1,24 +1,9 @@
-import React, { useCallback, useContext, useState } from 'react';
-import { createTheme, createPalette } from '../styles/theme';
+import React, { useContext } from 'react';
 
-const ThemeContext = React.createContext(null);
-// const ThemeActionContext = React.createContext();
+export const ThemeContext = React.createContext(null);
 
 const mergeOuterLocalTheme = (outerTheme, localTheme) => {
-    const { type } = localTheme;
-
-    if (type && outerTheme.type !== type) {
-        return {
-            ...outerTheme,
-            ...localTheme,
-            palette: createPalette(localTheme.type),
-        };
-    }
-
-    return {
-        ...outerTheme,
-        ...localTheme,
-    };
+    return { ...outerTheme, ...localTheme };
 };
 
 export const ThemeProvider = props => {
@@ -32,8 +17,4 @@ export const ThemeProvider = props => {
 
 export const useTheme = () => {
     return useContext(ThemeContext);
-};
-
-export const useToggleTheme = () => {
-    // return useContext(ThemeContext);
 };

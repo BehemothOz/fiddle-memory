@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import * as Board from '../Board';
 import * as Cell from '../Cell';
 import { ScreenView } from '../Screen';
-import { ThemeProvider, useTheme } from '../../providers/ThemeProvider';
 
 export const GameStatus = {
     STOPPED: 'Stopped',
@@ -49,11 +48,6 @@ export function GameView() {
 
     const { status, board } = state;
 
-    const theme = useTheme();
-    // const toggleTheme = useToggleTheme();
-
-    console.log('Parent: ', theme);
-
     useEffect(() => {
         if (state.status === GameStatus.RUNNING && hasWinningCond(state)) {
             /*
@@ -83,8 +77,6 @@ export function GameView() {
 
     console.log('control render main state: ', state);
 
-    // const [a, setA] = useState(false);
-
     const handleScreenClick = value => {
         setState(toggleScreen(value));
     };
@@ -103,18 +95,7 @@ export function GameView() {
                     <button onClick={() => handleScreenClick('Running')}>Game screen</button>
                     <button onClick={() => handleScreenClick('Won')}>Won screen</button>
                     <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
-                    {/* <input
-                        type="checkbox"
-                        // onClick={e => {
-                        //     console.log(e.target.checked);
-                        //     toggleTheme(e.target.checked)
-                        // }}
-                    /> */}
                 </div>
-
-                {/* <ThemeProvider value={{ type: theme.type === 'dark' ? 'light' : 'dark' }}>
-                    <Child />
-                </ThemeProvider> */}
 
                 <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
             </div>
@@ -130,83 +111,8 @@ export function GameView() {
     );
 }
 
-const useInvertThemeType = () => {
-    const theme = useTheme();
-    return {
-        type: theme.type == 'light' ? 'dark' : 'light',
-    };
-};
-
-const Child = () => {
-    const theme = useTheme();
-    return (
-        <>
-            <div className="child" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
-                Child
-            </div>
-            <style jsx>
-                {`
-                    .child {
-                        color: ${theme.palette.text.primary};
-                        background: ${theme.palette.background};
-                    }
-                `}
-            </style>
-        </>
-    );
-};
-
-const Right = () => {
-    const theme = useTheme();
-    const invertTheme = useInvertThemeType();
-    console.log(theme)
-    return (
-        <>
-            <div className="right" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
-                Right
-                <ThemeProvider theme={{}}>
-                    <Child />
-                </ThemeProvider>
-            </div>
-            <style jsx>
-                {`
-                    .right {
-                        color: ${theme.palette.text.primary};
-                        background: ${theme.palette.background};
-                    }
-                `}
-            </style>
-        </>
-    );
-};
-
-const Left = () => {
-    const theme = useTheme();
-
-    const invertTheme = useInvertThemeType();
-    return (
-        <>
-            <div className="left" style={{ width: '50%', margin: 16, outline: '1px solid gray' }}>
-                Left
-                <ThemeProvider theme={{ background: 'orange' }}>
-                    <Right />
-                </ThemeProvider>
-            </div>
-            <style jsx>
-                {`
-                    .left {
-                        color: ${theme.palette.text.primary};
-                        background: ${theme.palette.background};
-                    }
-                `}
-            </style>
-        </>
-    );
-};
-
 function ScreenBoxView(props) {
     const { status, board, onCellClick } = props;
-    const invertTheme = useInvertThemeType();
 
     switch (status) {
         case 'Running':
@@ -218,10 +124,6 @@ function ScreenBoxView(props) {
         case 'Lost':
             return 'This is lost screen';
         default:
-            return (
-                <div style={{ height: '100%' }}>
-                    <Left />
-                </div>
-            );
+            return 'Default';
     }
 }

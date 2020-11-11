@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { GameView } from '../components/Game';
-import { createTheme } from '../styles/theme';
+import { createTheme } from '../theme';
+import { useThemeMode } from '../hooks/useThemeMode';
 
 /*
     !Steps:
@@ -12,26 +12,11 @@ import { createTheme } from '../styles/theme';
     ? 4. type
 */
 
-export const useDarkMode = () => {
-    const [theme, setTheme] = useState('light');
-
-    const toggleTheme = () => {
-        console.log('toggleTheme call');
-        if (theme === 'light') {
-            setTheme('dark');
-        } else {
-            setTheme('light');
-        }
-    };
-
-    return [theme, toggleTheme];
-};
-
 export default function HomePage() {
-    const [mode, toggleTheme] = useDarkMode();
+    const [mode, toggleMode] = useThemeMode();
 
     const theme = createTheme({ type: mode });
-    console.log(theme);
+
     return (
         <ThemeProvider theme={theme}>
             <button
@@ -39,7 +24,7 @@ export default function HomePage() {
                 style={{ position: 'absolute', bottom: 50 }}
                 onClick={e => {
                     console.log(e.target.checked);
-                    toggleTheme(e.target.checked);
+                    toggleMode(e.target.checked);
                 }}
             >
                 Toggle
