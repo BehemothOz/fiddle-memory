@@ -15,8 +15,12 @@ function MyApp({ Component, pageProps }) {
                 </div>
             </ThemeProvider>
             <style jsx global>{`
+                html,
                 body {
                     font-size: ${theme.typography.htmlFontSize};
+                }
+
+                body {
                     color: ${theme.palette.text.primary};
                     background-color: ${theme.palette.background};
                 }
@@ -36,7 +40,7 @@ function MyApp({ Component, pageProps }) {
                     }
 
                     h1 {
-                        margin: 0;
+                        margin: 0.35em;
                         font-size: 55px;
                         line-height: 1.2;
                     }

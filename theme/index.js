@@ -1,3 +1,7 @@
+// #4caf50 green
+// #ff3e3e red
+// #353d50 gray
+
 const light = {
     text: {
         primary: 'rgba(0, 0, 0, 0.87)',

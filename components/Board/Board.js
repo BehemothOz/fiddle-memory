@@ -30,6 +30,8 @@ export const areOpensDifferent = board => {
 };
 
 export const makeRandom = n => {
+    // if (n / 2 % 2 === 0) return;
+
     const values = new Array(n / 2).fill().map((_, i) => i + 1);
 
     const doubleValues = values.flatMap(it => [it, it]);
