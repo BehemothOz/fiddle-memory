@@ -48,20 +48,48 @@ export const View = props => {
 
     return (
         <>
-        <div
-            style={{
-                color: isClosed(cell) ? '#353D50' : 'inherit',
-            }}
-            className={`cell ${getClassName(status)}`}
-            onClick={handleClick}
-        >
-            <Icon />
-        </div>
-        <style jsx>{`
-            .cell {
-                border-radius: 4px;
-            }
-        `}</style>
+            <div
+                style={{
+                    color: isClosed(cell) ? '#353D50' : 'inherit',
+                    cursor: isClosed(cell) ? 'pointer' : 'inherit',
+                }}
+                className={`cell ${getClassName(status)}`}
+                onClick={handleClick}
+            >
+                <Icon />
+            </div>
+            <style jsx>{`
+                .cell {
+                    border-radius: 4px;
+                }
+                .cell {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 48px;
+                }
+
+                .open {
+                    background-color: #4caf50;
+                }
+
+                .fail {
+                    background-color: #ff3e3e;
+                }
+
+                .done {
+                    background-color: transparent;
+                    border: 1px solid #353d50;
+                }
+
+                .close {
+                    background-color: #353d50;
+                }
+
+                .unknown {
+                    background-color: black;
+                }
+            `}</style>
         </>
     );
 };

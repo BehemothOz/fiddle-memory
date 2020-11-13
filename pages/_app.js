@@ -1,7 +1,6 @@
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { useThemeMode } from '../hooks/useThemeMode';
 import { createTheme } from '../theme';
-import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
     const [mode, toggleMode] = useThemeMode();
@@ -9,21 +8,37 @@ function MyApp({ Component, pageProps }) {
     const theme = createTheme({ type: mode });
 
     return (
-        <ThemeProvider theme={theme}>
-            <div id="root">
-                <Component toggleMode={toggleMode} {...pageProps} />
-            </div>
+        <>
+            <ThemeProvider theme={theme}>
+                <div id="root">
+                    <Component toggleMode={toggleMode} {...pageProps} />
+                </div>
+            </ThemeProvider>
             <style jsx global>{`
                 body {
+                    font-size: ${theme.typography.htmlFontSize};
                     color: ${theme.palette.text.primary};
                     background-color: ${theme.palette.background};
                 }
             `}</style>
             <style jsx global>
                 {`
+                    * {
+                        box-sizing: border-box;
+                    }
+
                     body {
-                        font-size: 16px;
+                        margin: 0;
+                        padding: 0;
+                        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+                            Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
                         transition: background 0.2s ease;
+                    }
+
+                    h1 {
+                        margin: 0;
+                        font-size: 55px;
+                        line-height: 1.2;
                     }
 
                     #root {
@@ -36,7 +51,7 @@ function MyApp({ Component, pageProps }) {
                     }
                 `}
             </style>
-        </ThemeProvider>
+        </>
     );
 }
 

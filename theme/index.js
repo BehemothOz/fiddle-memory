@@ -1,20 +1,28 @@
 const light = {
     text: {
-        primary: 'rgba(0, 0, 0, 0.87)', // 'rgba(0, 0, 0, 0.87)',
-        secondary: 'rgba(0, 0, 0, 0.54)',
-        hint: 'rgba(0, 0, 0, 0.38)',
+        primary: 'rgba(0, 0, 0, 0.87)',
     },
     background: '#eaecf1',
 };
 
 const dark = {
     text: {
-        primary: 'white', // 'rgba(0, 0, 0, 0.87)',
-        secondary: 'rgba(0, 0, 0, 0.54)',
-        hint: 'rgba(0, 0, 0, 0.38)',
+        primary: '#F9FAFB',
     },
     background: '#28303D',
 };
+
+/*
+    PX to REM (base calc)
+
+    const size = 14
+    const baseSize = 16
+
+    rem = size / baseSize
+
+    pxToRem: size => `${(size / baseSize)rem`,
+ */
+
 
 export const createPalette = type => {
     const types = { light, dark };
@@ -33,16 +41,8 @@ export const createTheme = ({ type = 'light' }) => {
 
     return {
         type,
-        shadows: {
-            0: 'none',
-            1: '0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
-        },
         typography: {
             htmlFontSize: 16,
-            subtitle: {
-                fontSize: '1rem',
-                lineHeight: 1.75,
-            },
         },
         palette,
     };

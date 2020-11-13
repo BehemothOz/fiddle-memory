@@ -38,7 +38,7 @@ const hasWinningCond = state => {
 
 const startGame = () => ({
     status: GameStatus.RUNNING,
-    board: Board.makeRandom(16),
+    board: Board.makeRandom(4),
 });
 
 export function GameView() {
@@ -113,15 +113,8 @@ function ScreenBoxView(props) {
                 <ScreenView>
                     <div style={{ textAlign: 'center' }}>
                         <h1>Memory Game</h1>
-                        {/* <button className="button" onClick={onStartingClick}>Click to start</button> */}
-                        <button className="button">Click to start</button>
-                        {/* 017EF2 */}
+                        <button className="button" onClick={onStartingClick}>Click to start</button>
                         <style jsx>{`
-                            h1 {
-                                margin: 0.3em;
-                                font-size: 55px;
-                            }
-
                             .button {
                                 padding: 8px 16px;
                                 font-size: 14px;
@@ -151,8 +144,36 @@ function ScreenBoxView(props) {
             return (
                 <ScreenView>
                     <div style={{ textAlign: 'center' }}>
-                        <h1>This is won screen</h1>
-                        <button onClick={onStartingClick}>Click</button>
+                        <h1>You win!</h1>
+                        <button className="button" onClick={onStartingClick}>Start new game</button>
+                        <style jsx>{`
+                            h1 {
+                                margin: 0.3em;
+                                font-size: 55px;
+                            }
+
+                            .button {
+                                padding: 8px 16px;
+                                font-size: 14px;
+                                color: #1976d2;
+                                background: transparent;
+                                border: 1px solid #1976d2;
+                                outline: none;
+                                cursor: pointer;
+                                text-transform: uppercase;
+                            }
+
+                            .button:hover {
+                                color: #2163FF;
+                                border-color: #2163FF;
+                            }
+
+                            .button:active {
+                                color: #1C4BFF;
+                                border-color: #1C4BFF;
+                            }
+                        `}
+                        </style>
                     </div>
                 </ScreenView>
             )
