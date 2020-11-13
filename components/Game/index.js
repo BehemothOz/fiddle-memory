@@ -36,14 +36,19 @@ const hasWinningCond = state => {
     return doneCell.length === state.board.length;
 };
 
+const startGame = () => ({
+    status: GameStatus.RUNNING,
+    board: Board.makeRandom(16),
+});
+
 export function GameView() {
     /*
      * one-dimensional - array
      * two-dimensional - matrix
      */
     const [state, setState] = useState({
-        status: GameStatus.Stopped,
-        board: Board.makeRandom(16),
+        ...startGame(),
+        status: GameStatus.STOPPED,
     });
 
     const { status, board } = state;
@@ -77,8 +82,8 @@ export function GameView() {
 
     console.log('control render main state: ', state);
 
-    const handleScreenClick = value => {
-        setState(toggleScreen(value));
+    const handleStartingClick = () => {
+        setState(startGame);
     };
 
     const handleRunningClick = i => {
@@ -88,39 +93,69 @@ export function GameView() {
     };
 
     return (
-        <>
-            <div>
-                <div style={{ position: 'absolute', top: 0, left: 0 }}>
-                    <button onClick={() => handleScreenClick('Stopped')}>Start screen</button>
-                    <button onClick={() => handleScreenClick('Running')}>Game screen</button>
-                    <button onClick={() => handleScreenClick('Won')}>Won screen</button>
-                    <button onClick={() => handleScreenClick('Lose')}>Lost screen</button>
-                </div>
-
-                <ScreenBoxView status={status} board={board} onCellClick={handleRunningClick} />
-            </div>
-            {/* <style jsx>
-                {`
-                    #root {
-                        width: 100vw;
-                        height: 100vh;
-                    }
-                `}
-            </style> */}
-        </>
+        <ScreenBoxView
+            status={status}
+            board={board}
+            onStartingClick={handleStartingClick}
+            onCellClick={handleRunningClick}
+        />
     );
 }
 
 function ScreenBoxView(props) {
-    const { status, board, onCellClick } = props;
+    const { status, board, onStartingClick, onCellClick } = props;
 
     switch (status) {
         case 'Running':
             return <Board.View board={board} onClick={onCellClick} />;
         case 'Stopped':
-            return <ScreenView>'This is stopped screen'</ScreenView>;
+            return (
+                <ScreenView>
+                    <div style={{ textAlign: 'center' }}>
+                        <h1>Memory Game</h1>
+                        {/* <button className="button" onClick={onStartingClick}>Click to start</button> */}
+                        <button className="button">Click to start</button>
+                        {/* 017EF2 */}
+                        <style jsx>{`
+                            h1 {
+                                margin: 0.3em;
+                                font-size: 55px;
+                            }
+
+                            .button {
+                                padding: 8px 16px;
+                                font-size: 14px;
+                                color: #1976d2;
+                                background: transparent;
+                                border: 1px solid #1976d2;
+                                outline: none;
+                                cursor: pointer;
+                                text-transform: uppercase;
+                            }
+
+                            .button:hover {
+                                color: #2163FF;
+                                border-color: #2163FF;
+                            }
+
+                            .button:active {
+                                color: #1C4BFF;
+                                border-color: #1C4BFF;
+                            }
+                        `}
+                        </style>
+                    </div>
+                </ScreenView>
+            );
         case 'Won':
-            return <ScreenView>'This is won screen'</ScreenView>;
+            return (
+                <ScreenView>
+                    <div style={{ textAlign: 'center' }}>
+                        <h1>This is won screen</h1>
+                        <button onClick={onStartingClick}>Click</button>
+                    </div>
+                </ScreenView>
+            )
         case 'Lost':
             return 'This is lost screen';
         default:

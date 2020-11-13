@@ -1,10 +1,10 @@
 const light = {
     text: {
-        primary: 'black', // 'rgba(0, 0, 0, 0.87)',
+        primary: 'rgba(0, 0, 0, 0.87)', // 'rgba(0, 0, 0, 0.87)',
         secondary: 'rgba(0, 0, 0, 0.54)',
         hint: 'rgba(0, 0, 0, 0.38)',
     },
-    background: '#ff8b8b',
+    background: '#eaecf1',
 };
 
 const dark = {

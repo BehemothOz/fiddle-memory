@@ -15,6 +15,7 @@ function MyApp({ Component, pageProps }) {
             </div>
             <style jsx global>{`
                 body {
+                    color: ${theme.palette.text.primary};
                     background-color: ${theme.palette.background};
                 }
             `}</style>
