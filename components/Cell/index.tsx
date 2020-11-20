@@ -1,16 +1,27 @@
+import React from 'react';
 import * as Icon from '../../icons';
 
-export const Status = {
-    OPEN: 'open',
-    FAILED: 'failed',
-    DONE: 'done',
-    CLOSED: 'closed',
+export enum Status {
+    OPEN = 'open',
+    FAILED = 'failed',
+    DONE = 'done',
+    CLOSED = 'closed',
+}
+
+/*
+    symbol --> value
+*/
+type Cell = {
+    symbol: number;
+    status: Status;
+    icon: React.FC;
 };
 
-export const isOpen = cell => cell.status === Status.OPEN;
-export const isFailed = cell => cell.status === Status.FAILED;
-export const isDone = cell => cell.status === Status.DONE;
-export const isClosed = cell => cell.status === Status.CLOSED;
+// type PredFn = (cell : Cell) => boolean
+export const isOpen = (cell: Cell): boolean => cell.status === Status.OPEN;
+export const isFailed = (cell: Cell): boolean => cell.status === Status.FAILED;
+export const isDone = (cell: Cell): boolean => cell.status === Status.DONE;
+export const isClosed = (cell: Cell): boolean => cell.status === Status.CLOSED;
 
 const ClassByStatus = {
     [Status.OPEN]: 'open',
@@ -19,9 +30,9 @@ const ClassByStatus = {
     [Status.CLOSED]: 'close',
 };
 
-const UNKNOWN_CLASS = 'unknown';
+const UNKNOWN_CLASS: string = 'unknown';
 
-export const getClassName = status => {
+export const getClassName = (status: Status): string => {
     if (status && status in ClassByStatus) return ClassByStatus[status];
     return UNKNOWN_CLASS;
 };
@@ -40,9 +51,16 @@ export const IconByValue = {
 /*
     Name Cell will be reserved for type
 */
-export const View = props => {
-    const { cell, offset, onClick } = props;
-    const { symbol, status, icon: Icon } = cell;
+
+type CellViewProps = {
+    offset: number;
+    cell: Cell;
+    onClick: (offset: number) => void;
+};
+
+export const View: React.FC<CellViewProps> = props => {
+    const { offset, cell, onClick } = props;
+    const { status, icon: Icon } = cell;
 
     const handleClick = () => onClick(offset);
 
@@ -94,9 +112,8 @@ export const View = props => {
     );
 };
 
-View.defaultProps = {
-    cell: {
-        symbol: '',
-        status: Status.CLOSED,
-    },
-};
+// View.defaultProps = {
+//     cell: {
+//         status: Status.CLOSED,
+//     },
+// };
