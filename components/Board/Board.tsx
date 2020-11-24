@@ -1,55 +1,41 @@
 import * as Cell from '../Cell';
-import { setStatuses, getSymbols } from './helpers';
+import { getSymbols } from './helpers';
 import { allEqual, shuffle } from '../../libs';
 
-export const succeedStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isOpen, Cell.Status.DONE, state.board),
-});
+export type Board = Cell.Cell[];
 
-export const failStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isOpen, Cell.Status.FAILED, state.board),
-});
-
-export const failClosedStep = state => ({
-    ...state,
-    board: setStatuses(Cell.isFailed, Cell.Status.CLOSED, state.board),
-});
+type BoardViewProps = {
+    board: Board;
+    onClick: (offset: number) => void;
+};
 
 // logic with number 2 -> move to function
-export const areOpensEqual = board => {
+export const areOpensEqual = (board: Board): boolean => {
     const openedCell = getSymbols(Cell.isOpen, board);
     return openedCell.length >= 2 && allEqual(openedCell);
 };
 
 // logic with number 2 -> move to function
-export const areOpensDifferent = board => {
+export const areOpensDifferent = (board: Board): boolean => {
     const openedCell = getSymbols(Cell.isOpen, board);
     return openedCell.length >= 2 && !allEqual(openedCell);
 };
 
-export const makeRandom = n => {
+export const makeRandom = (n: number) => {
     // if (n / 2 % 2 === 0) return;
 
-    const values = new Array(n / 2).fill().map((_, i) => i + 1);
+    const values: number[] = new Array(n / 2).fill(null).map((_, i) => i + 1);
 
     const doubleValues = values.flatMap(it => [it, it]);
 
-    // return shuffle(doubleValues).map(it => ({
-    //     symbol: it,
-    //     status: Cell.Status.CLOSED,
-    //     icon: Cell.IconByValue[it],
-    // }));
-
-    return doubleValues.map(it => ({
+    return shuffle(doubleValues).map((it: number) => ({
         symbol: it,
         status: Cell.Status.CLOSED,
         icon: Cell.IconByValue[it],
     }));
 };
 
-export const View = props => {
+export const View: React.FC<BoardViewProps> = props => {
     const { board, onClick: onCellClick } = props;
 
     return (

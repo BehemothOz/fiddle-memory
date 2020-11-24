@@ -4,6 +4,13 @@ import * as Cell from '../Cell';
 import { ScreenView } from '../Screen';
 import { Button } from '../Button';
 
+// export enum GameStatus {
+//     STOPPED = 'Stopped',
+//     RUNNING = 'Running',
+//     WON = 'Won',
+//     LOST = 'Lost',
+// };
+
 export const GameStatus = {
     STOPPED: 'Stopped',
     RUNNING: 'Running',
@@ -27,6 +34,21 @@ const canOpenCell = (i, state) => {
 const openCell = i => state => ({
     ...state,
     board: Board.setStatus(i, Cell.Status.OPEN, state.board),
+});
+
+export const succeedStep = state => ({
+    ...state,
+    board: Board.setStatuses(Cell.isOpen, Cell.Status.DONE, state.board),
+});
+
+export const failStep = state => ({
+    ...state,
+    board: Board.setStatuses(Cell.isOpen, Cell.Status.FAILED, state.board),
+});
+
+export const failClosedStep = state => ({
+    ...state,
+    board: Board.setStatuses(Cell.isFailed, Cell.Status.CLOSED, state.board),
 });
 
 // Equal R.curry()
@@ -115,8 +137,7 @@ function ScreenBoxView(props) {
                     <div style={{ textAlign: 'center' }}>
                         <h1>Memory Game</h1>
                         <Button onClick={onStartingClick}>Click to start</Button>
-                        <style jsx>{``}
-                        </style>
+                        <style jsx>{``}</style>
                     </div>
                 </ScreenView>
             );
@@ -126,11 +147,10 @@ function ScreenBoxView(props) {
                     <div style={{ textAlign: 'center' }}>
                         <h1>You win!</h1>
                         <Button onClick={onStartingClick}>Start new game</Button>
-                        <style jsx>{``}
-                        </style>
+                        <style jsx>{``}</style>
                     </div>
                 </ScreenView>
-            )
+            );
         case 'Lost':
             return 'This is lost screen';
         default:

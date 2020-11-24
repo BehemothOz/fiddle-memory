@@ -11,7 +11,7 @@ export enum Status {
 /*
     symbol --> value
 */
-type Cell = {
+export type Cell = {
     symbol: number;
     status: Status;
     icon: React.FC;
@@ -37,7 +37,7 @@ export const getClassName = (status: Status): string => {
     return UNKNOWN_CLASS;
 };
 
-export const IconByValue = {
+export const IconByValue: { [key: number]: React.FC } = {
     1: Icon.Spade,
     2: Icon.Clubs,
     3: Icon.Diamond,
