@@ -1,4 +1,10 @@
-export const Button = props => {
+import React from 'react';
+
+type ButtonProps = {
+    onClick: () => void;
+};
+
+export const Button: React.FC<ButtonProps> = props => {
     const { children, onClick } = props;
 
     return (
