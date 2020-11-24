@@ -111,9 +111,3 @@ export const View: React.FC<CellViewProps> = props => {
         </>
     );
 };
-
-// View.defaultProps = {
-//     cell: {
-//         status: Status.CLOSED,
-//     },
-// };
